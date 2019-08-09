@@ -7,13 +7,14 @@ class Coordinates:
 
     """
 
-    def __init__(self, x: int, y: int, z: int):
+    def __init__(self, coordinates: (int, int, int)):
         """
 
         :param x:
         :param y:
         :param z:
         """
+        x, y, z = coordinates
         assert (x + y + z) == 0
         self._x = x
         self._y = y
@@ -25,6 +26,13 @@ class Coordinates:
         :return:
         """
         return "({}, {}, {})".format(self._x, self._y, self._z)
+
+    def get_values(self):
+        """
+
+        :return:
+        """
+        return self._x, self._y, self._z
 
     def to_cartesian(self):
         """

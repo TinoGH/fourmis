@@ -1,13 +1,13 @@
 
 import pygame
 from pygame.locals import *
-from map.Coordinates import Coordinates
-from map.Hex import Orientation
-from map.Map import Map
-
+pygame.init()
 screen = pygame.display.set_mode((800, 800))
 
-map = Map(2)
+from map.Map import Map
+
+
+map = Map(4)
 print(map)
 
 screen.fill([255, 255, 255])

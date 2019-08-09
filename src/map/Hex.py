@@ -1,21 +1,24 @@
 
 import pygame
+from map.Coordinates import Coordinates
 
 
 class Hex:
     """
 
     """
+    images_path = "./media/pixel_art/"
 
-    def __init__(self, image_path: str, orientation: int):
+    def __init__(self, coordinates: (int, int, int), orientation: int):
         """
 
-        :param image_path:
+        :param coordinates:
         :param orientation:
         """
         assert 0 <= orientation <= 5
+        self._coordinates = Coordinates(coordinates)
         self._name = ""
-        self._surface = pygame.image.load(image_path).convert_alpha()
+        self._surface = pygame.Surface((256, 256))
         self._orientation = orientation
 
     def __str__(self):
@@ -24,6 +27,13 @@ class Hex:
         :return:
         """
         return self._name
+
+    def get_coordinates(self):
+        """
+
+        :return:
+        """
+        return self._coordinates
 
     def get_orientation(self):
         """
@@ -44,26 +54,32 @@ class Empty(Hex):
     """
 
     """
+    image = pygame.image.load(Hex.images_path + "empty.png").convert_alpha()
 
-    def __init__(self):
+    def __init__(self, coordinates: (int, int, int)):
         """
 
+        :param coordinates:
         """
-        super().__init__("./media/pixel_art/empty.png", 0)
+        super().__init__(coordinates, 0)
         self._name = "Empty"
+        self._surface = Empty.image
 
 
 class Edge(Hex):
     """
 
     """
+    image = pygame.image.load(Hex.images_path + "edge.png").convert_alpha()
 
-    def __init__(self):
+    def __init__(self, coordinates: (int, int, int)):
         """
 
+        :param coordinates:
         """
-        super().__init__("./media/pixel_art/edge.png", 0)
+        super().__init__(coordinates, 0)
         self._name = "Edge"
+        self._surface = Edge.image
 
 
 class Orientation(Hex):
@@ -71,10 +87,14 @@ class Orientation(Hex):
 
     :param orientation:
     """
+    image = pygame.image.load(Hex.images_path + "orientation.png").convert_alpha()
 
-    def __init__(self, orientation: int):
+    def __init__(self, coordinates: (int, int, int), orientation: int):
         """
 
+        :param coordinates:
+        :param orientation:
         """
-        super().__init__("./media/pixel_art/orientation.png", orientation)
+        super().__init__(coordinates, orientation)
         self._name = "Orientation"
+        self._surface = Orientation.image
