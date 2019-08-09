@@ -1,4 +1,6 @@
 
+from math import sqrt
+
 
 class Coordinates:
     """
@@ -23,6 +25,15 @@ class Coordinates:
         :return:
         """
         return "({}, {}, {})".format(self._x, self._y, self._z)
+
+    def to_cartesian(self):
+        """
+
+        :return:
+        """
+        x = sqrt(3) / 2 * (self._x + self._y / 2)
+        y = 3 / 4 * self._y
+        return x, y
 
     def neighbours(self):
         """

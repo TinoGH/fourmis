@@ -1,4 +1,6 @@
 
+import pygame
+
 
 class Hex:
     """
@@ -10,6 +12,7 @@ class Hex:
 
         """
         self._name = ""
+        self._surface = pygame.Surface((256, 256))
 
     def __str__(self):
         """
@@ -17,6 +20,13 @@ class Hex:
         :return:
         """
         return self._name
+
+    def get_surface(self):
+        """
+
+        :return:
+        """
+        return self._surface
 
 
 class Empty(Hex):
@@ -30,6 +40,7 @@ class Empty(Hex):
         """
         super().__init__()
         self._name = "Empty"
+        self._surface = pygame.image.load("./media/pixel_art/empty.png").convert_alpha()
 
 
 class Edge(Hex):
@@ -43,3 +54,4 @@ class Edge(Hex):
         """
         super().__init__()
         self._name = "Edge"
+        self._surface = pygame.image.load("./media/pixel_art/edge.png").convert_alpha()

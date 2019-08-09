@@ -1,4 +1,6 @@
 
+import pygame
+from math import floor
 from map.Hex import Empty, Edge
 from map.Coordinates import Coordinates
 
@@ -17,7 +19,7 @@ class Map:
         self._radius = radius
         self._grid = dict()
         self._grid[Coordinates(0, 0, 0)] = Empty()
-        for i in range(radius + 2):
+        for i in range(1, radius + 2):
             if i < radius + 1:
                 cell = Empty
             else:
@@ -39,3 +41,19 @@ class Map:
         for coordinates in self._grid.keys():
             string += "{}\t:\t{}\n".format(coordinates, self._grid[coordinates])
         return string
+
+    def get_surface(self, size):
+        """
+
+        :return:
+        """
+        surface = pygame.Surface((size, size))
+        surface.fill([255, 255, 255])
+        hex_size = floor(size / (2 * (self._radius + 1) + 1))
+        for coordinates in self._grid.keys():
+            x, y = coordinates.to_cartesian()
+            x = round(x * hex_size - hex_size / 2 + size / 2)
+            y = round(y * hex_size - hex_size / 2 + size / 2)
+            hex_surface = pygame.transform.scale(self._grid[coordinates].get_surface(), (hex_size, hex_size))
+            surface.blit(hex_surface, (x, y))
+        return surface
