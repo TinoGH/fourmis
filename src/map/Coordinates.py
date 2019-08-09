@@ -6,6 +6,14 @@ class Coordinates:
     """
 
     """
+    directions = [
+        (1, 0, -1),
+        (1, -1, 0),
+        (0, -1, 1),
+        (-1, 0, 1),
+        (-1, 1, 0),
+        (0, 1, -1)
+    ]
 
     def __init__(self, coordinates: (int, int, int)):
         """
@@ -56,3 +64,27 @@ class Coordinates:
             Coordinates(self._x + 1, self._y - 1, self._z),
             Coordinates(self._x - 1, self._y + 1, self._z),
         ]
+
+    def look(self, direction):
+        """
+
+        :param direction:
+        :return:
+        """
+        assert 0 <= direction <= 5
+        return (
+            self._x + Coordinates.directions[direction][0],
+            self._y + Coordinates.directions[direction][1],
+            self._z + Coordinates.directions[direction][2]
+        )
+
+    def move(self, direction):
+        """
+
+        :param direction:
+        :return:
+        """
+        assert 0 <= direction <= 5
+        self._x += Coordinates.directions[direction][0]
+        self._y += Coordinates.directions[direction][1]
+        self._z += Coordinates.directions[direction][2]
