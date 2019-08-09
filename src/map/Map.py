@@ -1,7 +1,7 @@
 
 import pygame
 from math import floor
-from map.Hex import Empty, Edge
+from map.Hex import *
 from map.Coordinates import Coordinates
 
 
@@ -18,7 +18,7 @@ class Map:
         assert radius >= 0
         self._radius = radius
         self._grid = dict()
-        self._grid[Coordinates(0, 0, 0)] = Empty()
+        self._grid[Coordinates(0, 0, 0)] = Orientation(2)
         for i in range(1, radius + 2):
             if i < radius + 1:
                 cell = Empty
@@ -52,8 +52,13 @@ class Map:
         hex_size = floor(size / (2 * (self._radius + 1) + 1))
         for coordinates in self._grid.keys():
             x, y = coordinates.to_cartesian()
-            x = round(x * hex_size - hex_size / 2 + size / 2)
-            y = round(y * hex_size - hex_size / 2 + size / 2)
-            hex_surface = pygame.transform.scale(self._grid[coordinates].get_surface(), (hex_size, hex_size))
+            x = x * hex_size - hex_size / 2 + size / 2
+            y = y * hex_size - hex_size / 2 + size / 2
+            hex_surface = pygame.transform.rotate(
+                pygame.transform.scale(self._grid[coordinates].get_surface(), (hex_size, hex_size)),
+                self._grid[coordinates].get_orientation() * 60)
+            w, h = hex_surface.get_size()
+            x = x - (w - hex_size) / 2
+            y = y - (h - hex_size) / 2
             surface.blit(hex_surface, (x, y))
         return surface

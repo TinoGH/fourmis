@@ -7,12 +7,16 @@ class Hex:
 
     """
 
-    def __init__(self):
+    def __init__(self, image_path: str, orientation: int):
         """
 
+        :param image_path:
+        :param orientation:
         """
+        assert 0 <= orientation <= 5
         self._name = ""
-        self._surface = pygame.Surface((256, 256))
+        self._surface = pygame.image.load(image_path).convert_alpha()
+        self._orientation = orientation
 
     def __str__(self):
         """
@@ -20,6 +24,13 @@ class Hex:
         :return:
         """
         return self._name
+
+    def get_orientation(self):
+        """
+
+        :return:
+        """
+        return self._orientation
 
     def get_surface(self):
         """
@@ -38,9 +49,8 @@ class Empty(Hex):
         """
 
         """
-        super().__init__()
+        super().__init__("./media/pixel_art/empty.png", 0)
         self._name = "Empty"
-        self._surface = pygame.image.load("./media/pixel_art/empty.png").convert_alpha()
 
 
 class Edge(Hex):
@@ -52,6 +62,19 @@ class Edge(Hex):
         """
 
         """
-        super().__init__()
+        super().__init__("./media/pixel_art/edge.png", 0)
         self._name = "Edge"
-        self._surface = pygame.image.load("./media/pixel_art/edge.png").convert_alpha()
+
+
+class Orientation(Hex):
+    """
+
+    :param orientation:
+    """
+
+    def __init__(self, orientation: int):
+        """
+
+        """
+        super().__init__("./media/pixel_art/orientation.png", orientation)
+        self._name = "Orientation"
