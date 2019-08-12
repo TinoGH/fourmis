@@ -57,12 +57,12 @@ class Coordinates:
         :return:
         """
         return [
-            Coordinates(self._x, self._y + 1, self._z - 1),
-            Coordinates(self._x, self._y - 1, self._z + 1),
-            Coordinates(self._x + 1, self._y, self._z - 1),
-            Coordinates(self._x - 1, self._y, self._z + 1),
-            Coordinates(self._x + 1, self._y - 1, self._z),
-            Coordinates(self._x - 1, self._y + 1, self._z),
+            Coordinates((self._x, self._y + 1, self._z - 1)),
+            Coordinates((self._x, self._y - 1, self._z + 1)),
+            Coordinates((self._x + 1, self._y, self._z - 1)),
+            Coordinates((self._x - 1, self._y, self._z + 1)),
+            Coordinates((self._x + 1, self._y - 1, self._z)),
+            Coordinates((self._x - 1, self._y + 1, self._z)),
         ]
 
     def look(self, direction):

@@ -5,10 +5,11 @@ pygame.init()
 screen = pygame.display.set_mode((1000, 1000))
 
 from map.Map import Map
+from gui.Board import Board
 
 
 map = Map(8)
-print(map)
+board = Board(1000)
 
 play = True
 while play:
@@ -17,6 +18,7 @@ while play:
             play = False
         elif event.type == KEYDOWN:
             useful_key = True
+            direction = 0
             if event.key == K_d:
                 direction = 0
             elif event.key == K_e:
@@ -29,13 +31,17 @@ while play:
                 direction = 4
             elif event.key == K_x:
                 direction = 5
+            elif event.key == K_ESCAPE:
+                play = False
+                useful_key = False
             else:
                 useful_key = False
+
             if useful_key:
                 map.move_selection(direction)
         else:
             pass
 
     screen.fill([255, 255, 255])
-    screen.blit(map.get_surface(1000), (0, 0))
+    screen.blit(board.get_surface(map), (0, 0))
     pygame.display.flip()
