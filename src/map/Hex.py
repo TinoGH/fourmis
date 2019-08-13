@@ -10,7 +10,8 @@ class Hex:
         "empty",
         "edge",
         "orientation",
-        "ant"
+        "ant",
+        "highlight"
     ]
 
     def __init__(self, coordinates: (int, int, int), orientation: int):
