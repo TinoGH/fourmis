@@ -1,5 +1,6 @@
 
-from map.Hex import Empty, Edge, Orientation, Ant
+from map.Hexagons import Empty, Edge, Orientation, Ant
+import map.coordinates as coords
 
 
 class Map:
@@ -15,15 +16,15 @@ class Map:
         assert radius >= 0
         self._radius = radius
         self._grid = dict()
-        self._grid[(0, 0, 0)] = Ant((0, 0, 0), 0)
+        self._grid[(0, 0, 0)] = Ant(0)
         for i in range(1, radius + 1):
             for j in range(i):
-                self._grid[(j, -i, i - j)] = Empty((j, -i, i - j))
-                self._grid[(i, j - i, -j)] = Empty((i, j - i, -j))
-                self._grid[(i - j, j, -i)] = Empty((i - j, j, -i))
-                self._grid[(-j, i, j - i)] = Empty((-j, i, j - i))
-                self._grid[(-i, i - j, j)] = Empty((-i, i - j, j))
-                self._grid[(j - i, -j, i)] = Empty((j - i, -j, i))
+                self._grid[(j, -i, i - j)] = Empty()
+                self._grid[(i, j - i, -j)] = Empty()
+                self._grid[(i - j, j, -i)] = Empty()
+                self._grid[(-j, i, j - i)] = Empty()
+                self._grid[(-i, i - j, j)] = Empty()
+                self._grid[(j - i, -j, i)] = Empty()
         self._selection = (0, 0, 0)
 
     def __str__(self):
@@ -32,8 +33,8 @@ class Map:
         :return:
         """
         string = ""
-        for cell in self._grid.values():
-            string += "{}\t:\t{} \t{}\n".format(cell.get_coordinates(), cell, cell.get_orientation())
+        for coordinates, cell in self._grid.items():
+            string += "{}\t:\t{} \t{}\n".format(coordinates, cell, cell.get_orientation())
         return string
 
     def get_radius(self):
@@ -55,13 +56,12 @@ class Map:
 
         :param direction:
         """
-        cell_target_coordinates = self._grid[self._selection].get_coordinates().look(direction)
+        cell_target_coordinates = coords.look(self._selection, direction)
         if cell_target_coordinates in self._grid.keys():
             if self._grid[cell_target_coordinates].get_name() == "empty":
                 self._grid[cell_target_coordinates] = self._grid[self._selection]
-                self._grid[cell_target_coordinates].get_coordinates().move(direction)
                 self._grid[cell_target_coordinates].set_orientation(direction)
-                self._grid[self._selection] = Empty(self._selection)
+                self._grid[self._selection] = Empty()
                 self._selection = cell_target_coordinates
         else:
             self._grid[self._selection].set_orientation(direction)

@@ -1,27 +1,24 @@
 
-from map.Coordinates import Coordinates
 
-
-class Hex:
+class Hexagon:
     """
 
     """
-    hex_list = [
+    hexagons_list = [
+        "hexagon",
+        "highlight",
         "empty",
         "edge",
         "orientation",
-        "ant",
-        "highlight"
+        "ant"
     ]
 
-    def __init__(self, coordinates: (int, int, int), orientation: int):
+    def __init__(self, orientation: int):
         """
 
-        :param coordinates:
         :param orientation:
         """
         assert 0 <= orientation <= 5
-        self._coordinates = Coordinates(coordinates)
         self._name = ""
         self._orientation = orientation
 
@@ -39,13 +36,6 @@ class Hex:
         """
         return self._name
 
-    def get_coordinates(self):
-        """
-
-        :return:
-        """
-        return self._coordinates
-
     def get_orientation(self):
         """
 
@@ -62,61 +52,57 @@ class Hex:
         self._orientation = orientation
 
 
-class Empty(Hex):
+class Empty(Hexagon):
     """
 
     """
 
-    def __init__(self, coordinates: (int, int, int)):
+    def __init__(self):
         """
 
-        :param coordinates:
         """
-        super().__init__(coordinates, 0)
+        super().__init__(0)
         self._name = "empty"
 
 
-class Edge(Hex):
+class Edge(Hexagon):
     """
 
     """
 
-    def __init__(self, coordinates: (int, int, int)):
+    def __init__(self):
         """
 
-        :param coordinates:
         """
-        super().__init__(coordinates, 0)
+        super().__init__(0)
         self._name = "edge"
 
 
-class Orientation(Hex):
+class Orientation(Hexagon):
     """
 
     :param orientation:
     """
 
-    def __init__(self, coordinates: (int, int, int), orientation: int):
+    def __init__(self, orientation: int):
         """
 
-        :param coordinates:
         :param orientation:
         """
-        super().__init__(coordinates, orientation)
+        super().__init__(orientation)
         self._name = "orientation"
 
 
-class Ant(Hex):
+class Ant(Hexagon):
     """
 
     :param orientation:
     """
 
-    def __init__(self, coordinates: (int, int, int), orientation: int):
+    def __init__(self, orientation: int):
         """
 
-        :param coordinates:
         :param orientation:
         """
-        super().__init__(coordinates, orientation)
+        super().__init__(orientation)
         self._name = "ant"

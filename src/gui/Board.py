@@ -1,9 +1,9 @@
 
 import pygame
 from map.Map import Map
-from map.Hex import Hex
-from map.Coordinates import Coordinates
-from math import floor, sqrt
+from map.Hexagons import Hexagon
+from math import floor
+import map.coordinates as coords
 
 
 class Board:
@@ -13,7 +13,7 @@ class Board:
 
     images_path = "./media/pixel_art/"
     images = dict()
-    for hex_type in Hex.hex_list:
+    for hex_type in Hexagon.hexagons_list:
         images[hex_type] = pygame.image.load(images_path + hex_type + ".png").convert_alpha()
 
     def __init__(self, size: int, map: 'Map'):
@@ -22,61 +22,67 @@ class Board:
         :param size:
         :param map:
         """
-        self._surface = pygame.Surface((size, size))
         self._size = size
         self._map = map
-        self._hex_size = floor(self._size / (2 * self._map.get_radius() + 1))
+        self._hex_size = floor(size / (2 * self._map.get_radius() + 1))
+        self._base_surface = pygame.Surface((size, size))
+        self._base_surface.fill([255, 255, 255])
+        for coordinates, cell in self._map.get_grid().items():
+            hexagon = pygame.transform.scale(Board.images["hexagon"], (self._hex_size, self._hex_size))
+            x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), hexagon.get_size())
+            self._base_surface.blit(hexagon, (x_pixels, y_pixels))
+        self._surface = pygame.Surface((size, size))
+        self.update_surface()
+
+    def update_surface(self):
+        """
+
+        """
+        self._surface.fill([255, 255, 255])
+        self._surface.blit(self._base_surface, (0, 0))
+        for coordinates, cell in self._map.get_grid().items():
+            hex_surface = pygame.transform.rotate(
+                pygame.transform.scale(Board.images[cell.get_name()], (self._hex_size, self._hex_size)),
+                cell.get_orientation() * 60)
+            x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), hex_surface.get_size())
+            self._surface.blit(hex_surface, (x_pixels, y_pixels))
 
     def get_surface(self):
         """
 
-        :param map:
         :return:
         """
-        self._surface.fill([255, 255, 255])
-        hex_size = self._hex_size
-        for cell in self._map.get_grid().values():
-            x, y = cell.get_coordinates().to_cartesian()
-            x = x * hex_size - hex_size / 2 + self._size / 2
-            y = y * hex_size - hex_size / 2 + self._size / 2
-            hex_surface = pygame.transform.rotate(
-                pygame.transform.scale(Board.images[cell.get_name()], (hex_size, hex_size)),
-                cell.get_orientation() * 60)
-            w, h = hex_surface.get_size()
-            x = x - (w - hex_size) / 2
-            y = y - (h - hex_size) / 2
-            self._surface.blit(hex_surface, (x, y))
         return self._surface
 
-    def cartesian_to_coordinates(self, coords: (int, int)):
+    def pixels_to_coordinates(self, pixels: (int, int)):
         """
 
-        :param coords:
+        :param pixels:
         :return:
         """
-        x, y = coords
-        x, y = (x - self._size / 2) / self._hex_size , (y - self._size / 2) / self._hex_size
-        X = round((2 / sqrt(3)) * x - (4 / 6) * y)
-        Y = round((4 / 3) * y)
-        Z = -X - Y
-        return Coordinates((X, Y, Z))
+        x_pixels, y_pixels = pixels
+        x, y = (x_pixels - self._size / 2) / self._hex_size, (y_pixels - self._size / 2) / self._hex_size
+        return x, y
 
-    def highlight(self, coordinates: 'Coordinates'):
+    def cartesian_to_pixels(self, cartesian: (int, int), size: (int, int)):
+        """
+
+        :param cartesian:
+        :param size:
+        :return:
+        """
+        x, y = cartesian
+        width, height = size
+        x_pixels = self._hex_size * (x - 1 / 2) + self._size / 2 - (width - self._hex_size) / 2
+        y_pixels = self._hex_size * (y - 1 / 2) + self._size / 2 - (height - self._hex_size) / 2
+        return x_pixels, y_pixels
+
+    def highlight(self, coordinates: (int, int, int)):
         """
 
         :param coordinates:
-        :return:
         """
-        surface = self.get_surface()
-        if coordinates.get_values() in self._map.get_grid().keys():
-            hex_size = self._hex_size
-            x, y = coordinates.to_cartesian()
-            x = x * hex_size - hex_size / 2 + self._size / 2
-            y = y * hex_size - hex_size / 2 + self._size / 2
-            hex_surface = pygame.transform.scale(Board.images["highlight"], (hex_size, hex_size))
-            w, h = hex_surface.get_size()
-            x = x - (w - hex_size) / 2
-            y = y - (h - hex_size) / 2
-            surface.blit(hex_surface, (x, y))
-        return surface
-
+        if coordinates in self._map.get_grid().keys():
+            highlight = pygame.transform.scale(Board.images["highlight"], (self._hex_size, self._hex_size))
+            x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), highlight.get_size())
+            self._surface.blit(highlight, (x_pixels, y_pixels))

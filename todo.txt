@@ -1,4 +1,4 @@
-refactor coordinates class => functions
-make basic surface with empty hexagones, make Board add content only for each cell
-refactor get_surface() methods, add update_surface() ... etc
+refactor coordinates class => functions                                                 DONE
+make basic surface with empty hexagones, make Board add content only for each cell      DONE
+refactor get_surface() methods, add update_surface() ... etc                            DONE
 mouse cartesian coordinates should work with map surface offset

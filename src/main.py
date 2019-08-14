@@ -5,18 +5,16 @@ pygame.init()
 screen = pygame.display.set_mode((1000, 1000))
 
 from map.Map import Map
-from map.Coordinates import Coordinates
 from gui.Board import Board
+import map.coordinates as coords
 
 
-map = Map(1)
+map = Map(10)
 board = Board(1000, map)
 
 play = True
-cell_coordinates = Coordinates((0, 0, 0))
+cell_coordinates = (None, None, None)
 while play:
-    screen.fill([255, 255, 255])
-
     event = pygame.event.wait()
     if event.type == QUIT:
         play = False
@@ -40,17 +38,16 @@ while play:
             useful_key = False
         else:
             useful_key = False
-
         if useful_key:
             map.move_selection(direction)
-
     elif event.type == MOUSEMOTION:
         mouse_pos = pygame.mouse.get_pos()
-        if board.cartesian_to_coordinates(mouse_pos).get_values() != cell_coordinates.get_values():
-            cell_coordinates = board.cartesian_to_coordinates(mouse_pos)
-            print(cell_coordinates)
+        cell_coordinates = coords.from_cartesian(board.pixels_to_coordinates(mouse_pos))
     else:
         pass
 
-    screen.blit(board.highlight(cell_coordinates), (0, 0))
+    screen.fill([255, 255, 255])
+    board.update_surface()
+    board.highlight(cell_coordinates)
+    screen.blit(board.get_surface(), (0, 0))
     pygame.display.flip()
