@@ -3,7 +3,7 @@ make basic surface with empty hexagones, make Board add content only for each ce
 refactor get_surface() methods, add update_surface() ... etc                            DONE
 mouse cartesian coordinates should work with map surface offset                         DONE
 
-find how to change a color
+find how to change a color                                                              DONE
 design "language" for instructions between rules and Map
 make everything return False or True
 transfer existing thing to rules as a starting point

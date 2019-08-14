@@ -15,6 +15,7 @@ class Board:
     images = dict()
     for hex_type in Hexagon.hexagons_list:
         images[hex_type] = pygame.image.load(images_path + hex_type + ".png").convert_alpha()
+    image_hexagon = pygame.image.load(images_path + "hexagon.png").convert_alpha()
 
     def __init__(self, size: int, map: 'Map'):
         """
@@ -28,7 +29,7 @@ class Board:
         self._base_surface = pygame.Surface((size, size))
         self._base_surface.fill([255, 255, 255])
         for coordinates, cell in self._map.get_grid().items():
-            hexagon = pygame.transform.scale(Board.images["hexagon"], (self._hex_size, self._hex_size))
+            hexagon = pygame.transform.scale(Board.image_hexagon, (self._hex_size, self._hex_size))
             x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), hexagon.get_size())
             self._base_surface.blit(hexagon, (x_pixels, y_pixels))
         self._surface = pygame.Surface((size, size))
@@ -89,7 +90,8 @@ class Board:
         :param coordinates:
         """
         if coordinates in self._map.get_grid().keys():
-            highlight = pygame.transform.scale(Board.images["highlight"], (self._hex_size, self._hex_size))
+            highlight = pygame.transform.scale(Board.image_hexagon, (self._hex_size, self._hex_size))
+            pygame.PixelArray(highlight).replace(pygame.Color(0, 0, 0, 255), pygame.Color(255, 0, 0, 255))
             x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), highlight.get_size())
             self._surface.blit(highlight, (x_pixels, y_pixels))
 
@@ -99,7 +101,7 @@ class Board:
         :param coordinates:
         """
         if coordinates in self._map.get_grid().keys():
-            select = pygame.transform.scale(Board.images["select"], (self._hex_size, self._hex_size))
+            select = pygame.transform.scale(Board.image_hexagon, (self._hex_size, self._hex_size))
+            pygame.PixelArray(select).replace(pygame.Color(0, 0, 0, 255), pygame.Color(0, 0, 255, 255))
             x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), select.get_size())
             self._surface.blit(select, (x_pixels, y_pixels))
-
