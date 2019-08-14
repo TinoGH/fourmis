@@ -52,14 +52,7 @@ def neighbours(coordinates: (int, int, int)):
     :return:
     """
     X, Y, Z = coordinates
-    return [
-        (X, Y + 1, Z - 1),
-        (X, Y - 1, Z + 1),
-        (X + 1, Y, Z - 1),
-        (X - 1, Y, Z + 1),
-        (X + 1, Y - 1, Z),
-        (X - 1, Y + 1, Z),
-    ]
+    return [(X + Xd, Y + Yd, Z + Zd) for (Xd, Yd, Zd) in ORIENTATIONS]
 
 
 def look(coordinates: (int, int, int), direction: int):

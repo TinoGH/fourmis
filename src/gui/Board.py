@@ -46,6 +46,8 @@ class Board:
                 cell.get_orientation() * 60)
             x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), hex_surface.get_size())
             self._surface.blit(hex_surface, (x_pixels, y_pixels))
+        if self._map.get_selection() != (None, None, None):
+            self.select(self._map.get_selection())
 
     def get_surface(self):
         """
@@ -54,13 +56,17 @@ class Board:
         """
         return self._surface
 
-    def pixels_to_coordinates(self, pixels: (int, int)):
+    def pixels_to_cartesian(self, pixels: (int, int), offset: (int, int)):
         """
 
         :param pixels:
+        :param offset:
         :return:
         """
         x_pixels, y_pixels = pixels
+        x_offset, y_offset = offset
+        x_pixels -= x_offset
+        y_pixels -= y_offset
         x, y = (x_pixels - self._size / 2) / self._hex_size, (y_pixels - self._size / 2) / self._hex_size
         return x, y
 
@@ -86,3 +92,14 @@ class Board:
             highlight = pygame.transform.scale(Board.images["highlight"], (self._hex_size, self._hex_size))
             x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), highlight.get_size())
             self._surface.blit(highlight, (x_pixels, y_pixels))
+
+    def select(self, coordinates: (int, int, int)):
+        """
+
+        :param coordinates:
+        """
+        if coordinates in self._map.get_grid().keys():
+            select = pygame.transform.scale(Board.images["select"], (self._hex_size, self._hex_size))
+            x_pixels, y_pixels = self.cartesian_to_pixels(coords.to_cartesian(coordinates), select.get_size())
+            self._surface.blit(select, (x_pixels, y_pixels))
+

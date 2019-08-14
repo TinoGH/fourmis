@@ -25,7 +25,7 @@ class Map:
                 self._grid[(-j, i, j - i)] = Empty()
                 self._grid[(-i, i - j, j)] = Empty()
                 self._grid[(j - i, -j, i)] = Empty()
-        self._selection = (0, 0, 0)
+        self._selection = (None, None, None)
 
     def __str__(self):
         """
@@ -51,17 +51,54 @@ class Map:
         """
         return self._grid
 
+    def get_selection(self):
+        """
+
+        :return:
+        """
+        return self._selection
+
+    def get_cell(self, coordinates: (int, int, int)):
+        """
+
+        :param coordinates:
+        :return:
+        """
+        if coordinates in self._grid.keys():
+            return self._grid[coordinates]
+        else:
+            return False
+
+    def select(self, coordinates: (int, int, int)):
+        """
+
+        :param coordinates:
+        :return:
+        """
+        if coordinates in self._grid.keys():
+            self._selection = coordinates
+            return True
+        else:
+            return False
+
+    def deselect(self):
+        """
+
+        """
+        self._selection = (None, None, None)
+
     def move_selection(self, direction: int):
         """
 
         :param direction:
         """
-        cell_target_coordinates = coords.look(self._selection, direction)
-        if cell_target_coordinates in self._grid.keys():
-            if self._grid[cell_target_coordinates].get_name() == "empty":
-                self._grid[cell_target_coordinates] = self._grid[self._selection]
-                self._grid[cell_target_coordinates].set_orientation(direction)
-                self._grid[self._selection] = Empty()
-                self._selection = cell_target_coordinates
-        else:
-            self._grid[self._selection].set_orientation(direction)
+        if self._selection != (None, None, None):
+            cell_target_coordinates = coords.look(self._selection, direction)
+            if cell_target_coordinates in self._grid.keys():
+                if self._grid[cell_target_coordinates].get_name() == "empty":
+                    self._grid[cell_target_coordinates] = self._grid[self._selection]
+                    self._grid[cell_target_coordinates].set_orientation(direction)
+                    self._grid[self._selection] = Empty()
+                    self._selection = cell_target_coordinates
+            else:
+                self._grid[self._selection].set_orientation(direction)

@@ -7,6 +7,7 @@ class Hexagon:
     hexagons_list = [
         "hexagon",
         "highlight",
+        "select",
         "empty",
         "edge",
         "orientation",
