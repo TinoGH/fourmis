@@ -1,5 +1,5 @@
 
-from map.Hexagons import Empty, Edge, Orientation, Ant
+from map.Hexagons import Hexagon, Empty, Ant
 import map.coordinates as coords
 
 
@@ -16,7 +16,7 @@ class Map:
         assert radius >= 0
         self._radius = radius
         self._grid = dict()
-        self._grid[(0, 0, 0)] = Ant(0)
+        self._grid[(0, 0, 0)] = Empty()
         for i in range(1, radius + 1):
             for j in range(i):
                 self._grid[(j, -i, i - j)] = Empty()
@@ -91,6 +91,7 @@ class Map:
         """
 
         :param direction:
+        :return:
         """
         if self._selection != (None, None, None):
             cell_target_coordinates = coords.look(self._selection, direction)
@@ -100,5 +101,19 @@ class Map:
                     self._grid[cell_target_coordinates].set_orientation(direction)
                     self._grid[self._selection] = Empty()
                     self._selection = cell_target_coordinates
-            else:
-                self._grid[self._selection].set_orientation(direction)
+                    return True
+        return False
+
+    def create_unit(self, coordinates: (int, int, int), type_name: str):
+        """
+
+        :param coordinates:
+        :param type_name:
+        :return:
+        """
+        assert type_name in Hexagon.hexagons_list
+        assert coordinates in self._grid.keys()
+        unit = Empty
+        if type_name == "ant":
+            unit = Ant
+        self._grid[coordinates] = unit(0)

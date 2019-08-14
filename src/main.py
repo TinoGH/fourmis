@@ -10,6 +10,8 @@ import map.coordinates as coords
 
 
 map = Map(6)
+map.create_unit((0, 0, 0), "ant")
+map.create_unit((-1, 1, 0), "ant")
 board = Board(900, map)
 map_pos = (50, 100)
 
@@ -23,28 +25,6 @@ while play:
     event = pygame.event.wait()
     if event.type == QUIT:
         play = False
-    elif event.type == KEYDOWN:
-        useful_key = True
-        direction = 0
-        if event.key == K_d:
-            direction = 0
-        elif event.key == K_e:
-            direction = 1
-        elif event.key == K_w:
-            direction = 2
-        elif event.key == K_a:
-            direction = 3
-        elif event.key == K_z:
-            direction = 4
-        elif event.key == K_x:
-            direction = 5
-        elif event.key == K_ESCAPE:
-            play = False
-            useful_key = False
-        else:
-            useful_key = False
-        if useful_key:
-            map.move_selection(direction)
     elif event.type == MOUSEMOTION:
         mouse_pos = pygame.mouse.get_pos()
         cell_coordinates = coords.from_cartesian(board.pixels_to_cartesian(mouse_pos, map_pos))
@@ -54,8 +34,8 @@ while play:
         if map.get_selection() != (None, None, None):
             if cell_coordinates in coords.neighbours(map.get_selection()):
                 direction = coords.neighbours(map.get_selection()).index(cell_coordinates)
-                map.move_selection(direction)
-                map.deselect()
+                if map.move_selection(direction):
+                    map.deselect()
         else:
             if map.get_cell(cell_coordinates) is not False:
                 if map.get_cell(cell_coordinates).get_name() != "empty":
